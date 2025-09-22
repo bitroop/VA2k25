@@ -1,9 +1,15 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { auth, db } from "../../../lib/firebase";
-import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
 export default function LoginPage() {
@@ -11,17 +17,20 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const role = searchParams.get("role") || "athlete";
+  const role = searchParams?.get("role") || "athlete";
 
-  // Login with Email/Password
+  // 🔹 Login with Email/Password
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const res = await signInWithEmailAndPassword(auth, email, password);
       const user = res.user;
 
-      // Ensure role is stored in Firestore
-      await setDoc(doc(db, "users", user.uid), { email: user.email, role }, { merge: true });
+      await setDoc(
+        doc(db, "users", user.uid),
+        { email: user.email, role },
+        { merge: true }
+      );
 
       if (role === "coach") router.push("/coach/dashboard");
       else router.push("/athlete/dashboard");
@@ -37,7 +46,7 @@ export default function LoginPage() {
     }
   };
 
-  // Login with Google
+  // 🔹 Login with Google
   const handleGoogle = async () => {
     try {
       const provider = new GoogleAuthProvider();
@@ -106,7 +115,10 @@ export default function LoginPage() {
 
         <p className="mt-4 text-gray-300 text-center">
           Don’t have an account?{" "}
-          <a href={`/auth/register?role=${role}`} className="text-indigo-400 hover:underline">
+          <a
+            href={`/auth/register?role=${role}`}
+            className="text-indigo-400 hover:underline"
+          >
             Register
           </a>
         </p>
