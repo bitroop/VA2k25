@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { storage, db } from "@/lib/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { addDoc, collection } from "firebase/firestore";
-import { analyzePosture } from "@/lib/pose";
+// import { analyzePosture } from "@/lib/pose";
 
 const tasks = [
   { text: "Do 10 pushups", time: 20 },
